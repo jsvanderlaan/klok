@@ -1,0 +1,8 @@
+<button
+    class="btn btn-primary btn-lg btn-wide text-lg shadow-lg shadow-black justify-center"
+    [ngClass]="{ 'btn-disabled': bliep }"
+    (click)="onClick()"
+>
+    <ng-container *ngIf="!bliep"><app-icon-klok class="stroke-current"></app-icon-klok></ng-container>
+    <ng-container *ngIf="bliep">bliep</ng-container>
+</button>

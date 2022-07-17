@@ -1,0 +1,68 @@
+<div class="overflow-x-auto flex gap-10 tabular-nums tracking-wide">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Dag</th>
+                <th>In</th>
+                <th>Uit</th>
+                <th>Gewerkt</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="liveToday$ | async as today">
+                <tr *ngFor="let period of today.periods; let i = index" class="active">
+                    <td *ngIf="i === 0" attr.rowspan="{{ today.periods.length }}">
+                        <div class="flex justify-center">Vandaag</div>
+                    </td>
+                    <td>
+                        <ng-container *ngTemplateOutlet="start; context: { $implicit: period }"></ng-container>
+                    </td>
+                    <td *ngIf="period.end === null" class="flex justify-center text-primary">
+                        <app-icon-klok class="inline-block w-6 h-6 stroke-current"></app-icon-klok>
+                    </td>
+                    <td *ngIf="period.end !== null">
+                        <ng-container *ngTemplateOutlet="end; context: { $implicit: period }"></ng-container>
+                    </td>
+                    <td *ngIf="i === 0" attr.rowspan="{{ today.periods.length }}">
+                        <ng-container *ngTemplateOutlet="total; context: { $implicit: today }"></ng-container>
+                    </td>
+                </tr>
+            </ng-container>
+
+            <ng-container *ngFor="let day of daysWithoutToday$ | async">
+                <tr *ngFor="let period of day.periods; let i = index">
+                    <td *ngIf="i === 0" attr.rowspan="{{ day.periods.length }}">
+                        <ng-container class="flex justify-center">{{ day.date | date: 'longDate' }}</ng-container>
+                    </td>
+                    <td>
+                        <ng-container *ngTemplateOutlet="start; context: { $implicit: period }"></ng-container>
+                    </td>
+                    <td *ngIf="period.end === null" class="flex justify-center text-warning">
+                        <div class="tooltip tooltip-warning" data-tip="niet uitgeklokt">
+                            <app-icon-warning class="inline-block w-6 h-6 stroke-current"></app-icon-warning>
+                        </div>
+                    </td>
+                    <td *ngIf="period.end !== null">
+                        <ng-container *ngTemplateOutlet="end; context: { $implicit: period }"></ng-container>
+                    </td>
+                    <td *ngIf="i === 0" attr.rowspan="{{ day.periods.length }}">
+                        <ng-container *ngTemplateOutlet="total; context: { $implicit: day }"></ng-container>
+                    </td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>
+
+<ng-template #start let-period>
+    {{ period.start | date: defaultTimeFormat }}
+</ng-template>
+
+<ng-template #end let-period>
+    {{ period.end | date: defaultTimeFormat }}
+</ng-template>
+
+<ng-template #total let-day>
+    <ng-container *ngIf="day.total.getHours() >= 1"> {{ day.total | date: 'H' }}u </ng-container>
+    {{ day.total | date: 'm' }}m
+</ng-template>
