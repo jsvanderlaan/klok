@@ -3,6 +3,7 @@ import { map, Observable } from 'rxjs';
 import { Constants } from '../constants';
 import { DayService } from '../services/day.service';
 import { DayInfo } from '../types';
+import { Utils } from '../utils';
 
 @Component({
     selector: 'app-period-table',
@@ -16,5 +17,13 @@ export class PeriodTableComponent {
     constructor(dayService: DayService) {
         this.daysWithoutToday$ = dayService.days$.pipe(map(days => days.filter(day => !day.isToday)));
         this.liveToday$ = dayService.liveToday$;
+    }
+
+    getHours(ms: number): number {
+        return Utils.msToHours(ms);
+    }
+
+    getMinutes(ms: number): number {
+        return Utils.msToMinutes(ms);
     }
 }

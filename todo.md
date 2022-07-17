@@ -1,6 +1,6 @@
 # mvp
 
--   add repo
+-   ~~add repo~~
 -   deploy to netlify
 -   update favicon.ico
 -   modify times + handle overlapping periods??

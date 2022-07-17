@@ -19,7 +19,7 @@ export class DayService {
                 date: parseISO(key),
                 periods: value,
                 isToday: isToday(parseISO(key)),
-                total: Utils.totalTime(value),
+                totalMs: Utils.totalTimeMs(value),
             }));
         })
     );
@@ -37,10 +37,9 @@ export class DayService {
                 return today;
             }
             const livePeriod = today.periods[0];
-
             return {
                 ...today,
-                total: Utils.totalTime([{ start: livePeriod.start, end: new Date() }, ...today.periods.slice(1)]),
+                totalMs: Utils.totalTimeMs([{ start: livePeriod.start, end: new Date() }, ...today.periods.slice(1)]),
             };
         })
     );

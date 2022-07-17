@@ -12,11 +12,19 @@ export class Utils {
         }, {} as { [key: string]: T[] });
     };
 
-    static totalTime(periods: Period[]): Date {
+    static totalTimeMs(periods: Period[]): number {
         const milliseconds = Utils.add(
             periods.filter(({ end }) => end !== null),
             ({ start, end }) => differenceInMilliseconds(end!, start)
         );
-        return new Date(milliseconds);
+        return milliseconds;
+    }
+
+    static msToHours(milliseconds: number): number {
+        return Math.floor(milliseconds / (1000 * 60 * 60));
+    }
+
+    static msToMinutes(milliseconds: number): number {
+        return Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
     }
 }

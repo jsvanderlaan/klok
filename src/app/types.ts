@@ -8,5 +8,5 @@ export interface DayInfo {
     date: Date;
     periods: Period[];
     isToday: boolean;
-    total: Date;
+    totalMs: number;
 }
