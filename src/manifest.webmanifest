@@ -1,9 +1,9 @@
 {
   "name": "klok",
   "short_name": "klok",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
-  "display": "fullscreen",
+  "theme_color": "#1eb854",
+  "background_color": "#171212",
+  "display": "standalone",
   "scope": "./",
   "start_url": "./",
   "icons": [
