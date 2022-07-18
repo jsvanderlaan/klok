@@ -3,8 +3,8 @@
         <thead>
             <tr>
                 <th>Dag</th>
-                <th>In</th>
-                <th>Uit</th>
+                <th><div class="flex justify-center">In</div></th>
+                <th><div class="flex justify-center">Uit</div></th>
                 <th>Gewerkt</th>
             </tr>
         </thead>
@@ -17,8 +17,10 @@
                     <td>
                         <ng-container *ngTemplateOutlet="start; context: { $implicit: period }"></ng-container>
                     </td>
-                    <td *ngIf="period.end === null" class="flex justify-center text-primary">
-                        <app-icon-klok class="inline-block w-6 h-6 stroke-current"></app-icon-klok>
+                    <td *ngIf="period.end === null" class="text-primary">
+                        <div class="tooltip flex justify-center" data-tip="klok loopt">
+                            <app-icon-klok class="w-6 h-6 stroke-current"></app-icon-klok>
+                        </div>
                     </td>
                     <td *ngIf="period.end !== null">
                         <ng-container *ngTemplateOutlet="end; context: { $implicit: period }"></ng-container>
@@ -37,9 +39,9 @@
                     <td>
                         <ng-container *ngTemplateOutlet="start; context: { $implicit: period }"></ng-container>
                     </td>
-                    <td *ngIf="period.end === null" class="flex justify-center text-warning">
-                        <div class="tooltip tooltip-warning" data-tip="niet uitgeklokt">
-                            <app-icon-warning class="inline-block w-6 h-6 stroke-current"></app-icon-warning>
+                    <td *ngIf="period.end === null" class="text-warning">
+                        <div class="tooltip flex justify-center" data-tip="niet uitgeklokt">
+                            <app-icon-warning class="w-6 h-6 stroke-current"></app-icon-warning>
                         </div>
                     </td>
                     <td *ngIf="period.end !== null">
@@ -53,13 +55,18 @@
         </tbody>
     </table>
 </div>
+<app-period-edit-modal *ngIf="modalOpened" [id]="selectedPeriodId" (close)="closeModal()"></app-period-edit-modal>
 
 <ng-template #start let-period>
-    {{ period.start | date: defaultTimeFormat }}
+    <button class="btn btn-sm btn-ghost" (click)="openModal(period.id)">
+        {{ period.start | date: defaultTimeFormat }}
+    </button>
 </ng-template>
 
 <ng-template #end let-period>
-    {{ period.end | date: defaultTimeFormat }}
+    <button class="btn btn-sm btn-ghost" (click)="openModal(period.id)">
+        {{ period.end | date: defaultTimeFormat }}
+    </button>
 </ng-template>
 
 <ng-template #total let-day>

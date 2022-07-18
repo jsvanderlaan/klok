@@ -14,6 +14,9 @@ export class PeriodTableComponent {
     liveToday$: Observable<DayInfo | null>;
     defaultTimeFormat = Constants.defaultTimeFormat;
 
+    modalOpened: boolean = false;
+    selectedPeriodId: number | null = null;
+
     constructor(dayService: DayService) {
         this.daysWithoutToday$ = dayService.days$.pipe(map(days => days.filter(day => !day.isToday)));
         this.liveToday$ = dayService.liveToday$;
@@ -25,5 +28,15 @@ export class PeriodTableComponent {
 
     getMinutes(ms: number): number {
         return Utils.msToMinutes(ms);
+    }
+
+    openModal(periodId: number): void {
+        // this.selectedPeriodId = periodId;
+        // this.modalOpened = true;
+    }
+
+    closeModal(): void {
+        this.selectedPeriodId = null;
+        this.modalOpened = false;
     }
 }

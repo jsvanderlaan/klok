@@ -38,4 +38,8 @@ export class PeriodService implements OnDestroy {
             )
         );
     }
+
+    update(period: Period): Observable<number> {
+        return from(db.periods.update(period.id!, period));
+    }
 }
