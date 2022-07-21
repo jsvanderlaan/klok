@@ -1,11 +1,76 @@
 <input type="checkbox" #modal class="modal-toggle" />
 <div class="modal">
     <div class="modal-box">
+        <form [formGroup]="form" class="text-lg">
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Ingeklokt</span>
+                </label>
+                <div>
+                    <select
+                        name="hours"
+                        class="select mr-4"
+                        [ngClass]="{ 'select-error': triedSubmitting && !controls.hoursIn.valid }"
+                        formControlName="hoursIn"
+                    >
+                        <option *ngFor="let i of hourOptions" [value]="i">{{ i | number: '2.0-0' }}</option>
+                    </select>
+                    <span class="mr-4">:</span>
+                    <select
+                        name="minutes"
+                        class="select mr-4"
+                        [ngClass]="{ 'select-error': triedSubmitting && !controls.minutesIn.valid }"
+                        formControlName="minutesIn"
+                    >
+                        <option *ngFor="let i of minuteOptions" [value]="i">{{ i | number: '2.0-0' }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Uitgeklokt</span>
+                </label>
+                <div>
+                    <select
+                        name="hours"
+                        class="select mr-4"
+                        [ngClass]="{ 'select-error': triedSubmitting && !controls.hoursOut.valid }"
+                        formControlName="hoursOut"
+                    >
+                        <option *ngFor="let i of hourOptions" [value]="i">{{ i | number: '2.0-0' }}</option>
+                    </select>
+                    <span class="mr-4">:</span>
+                    <select
+                        name="minutes"
+                        class="select mr-4"
+                        [ngClass]="{ 'select-error': triedSubmitting && !controls.minutesOut.valid }"
+                        formControlName="minutesOut"
+                    >
+                        <option *ngFor="let i of minuteOptions" [value]="i">{{ i | number: '2.0-0' }}</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+
         <div class="modal-action">
-            <label (click)="savePeriod()" class="btn">Save</label>
-        </div>
-        <div class="modal-action">
-            <label (click)="closeModal()" class="btn">Nope</label>
+            <label (click)="deletePeriod()" class="btn btn-warning">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    class="w-6 h-6 stroke-current"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="arcs"
+                >
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+            </label>
+            <label (click)="closeModal()" class="btn">Annuleer</label>
+            <label (click)="savePeriod()" class="btn btn-primary">Opslaan</label>
         </div>
     </div>
 </div>

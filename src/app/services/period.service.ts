@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { isSameDay } from 'date-fns';
 import { liveQuery } from 'dexie';
-import { BehaviorSubject, from, map, Observable, shareReplay, Subscription, switchMap, take } from 'rxjs';
+import { from, map, Observable, shareReplay, Subject, Subscription, switchMap, take } from 'rxjs';
 import { db } from '../db';
 import { Period } from '../types';
 
@@ -10,7 +10,7 @@ import { Period } from '../types';
 })
 export class PeriodService implements OnDestroy {
     private readonly _sub = new Subscription();
-    private _periods$: BehaviorSubject<Period[]> = new BehaviorSubject<Period[]>([]);
+    private _periods$: Subject<Period[]> = new Subject<Period[]>();
     private _validatedPeriods$ = this._periods$.pipe(
         map(periods => [...periods].sort(({ start: start1 }, { start: start2 }) => start2.getTime() - start1.getTime())),
         shareReplay(1)
@@ -41,5 +41,9 @@ export class PeriodService implements OnDestroy {
 
     update(period: Period): Observable<number> {
         return from(db.periods.update(period.id!, period));
+    }
+
+    delete(id: number): Observable<void> {
+        return from(db.periods.delete(id));
     }
 }

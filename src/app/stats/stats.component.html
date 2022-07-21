@@ -1,0 +1,17 @@
+<div class="stats shadow">
+    <div class="stat" *ngIf="relativeMonthMs$ | async as month">
+        <div class="stat-title">Deze maand</div>
+        <div class="stat-value" [ngClass]="month >= 0 ? 'text-success-content' : 'text-warning-content'">
+            {{ month | time }}
+        </div>
+        <div class="stat-desc">{{ month >= 0 ? 'Te veel' : 'Te weinig' }} gewerkt</div>
+    </div>
+
+    <div class="stat" *ngIf="relativeTotalMs$ | async as total">
+        <div class="stat-title">Totaal</div>
+        <div class="stat-value" [ngClass]="total >= 0 ? 'text-success-content' : 'text-warning-content'">
+            {{ total | time }}
+        </div>
+        <div class="stat-desc">{{ total >= 0 ? 'Te veel' : 'Te weinig' }} gewerkt</div>
+    </div>
+</div>

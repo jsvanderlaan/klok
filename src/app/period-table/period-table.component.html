@@ -1,10 +1,11 @@
-<div class="overflow-x-auto flex gap-10 tabular-nums tracking-wide">
+<div class="flex gap-10 tracking-wide">
     <table class="table">
         <thead>
             <tr>
                 <th>Dag</th>
                 <th><div class="flex justify-center">In</div></th>
                 <th><div class="flex justify-center">Uit</div></th>
+                <th></th>
                 <th>Gewerkt</th>
             </tr>
         </thead>
@@ -12,7 +13,7 @@
             <ng-container *ngIf="liveToday$ | async as today">
                 <tr *ngFor="let period of today.periods; let i = index" class="active">
                     <td *ngIf="i === 0" attr.rowspan="{{ today.periods.length }}">
-                        <div class="flex justify-center">Vandaag</div>
+                        <div>Vandaag</div>
                     </td>
                     <td>
                         <ng-container *ngTemplateOutlet="start; context: { $implicit: period }"></ng-container>
@@ -25,6 +26,9 @@
                     <td *ngIf="period.end !== null">
                         <ng-container *ngTemplateOutlet="end; context: { $implicit: period }"></ng-container>
                     </td>
+                    <td>
+                        <ng-container *ngTemplateOutlet="edit; context: { $implicit: period }"></ng-container>
+                    </td>
                     <td *ngIf="i === 0" attr.rowspan="{{ today.periods.length }}">
                         <ng-container *ngTemplateOutlet="total; context: { $implicit: today }"></ng-container>
                     </td>
@@ -34,7 +38,8 @@
             <ng-container *ngFor="let day of daysWithoutToday$ | async">
                 <tr *ngFor="let period of day.periods; let i = index">
                     <td *ngIf="i === 0" attr.rowspan="{{ day.periods.length }}">
-                        <ng-container class="flex justify-center">{{ day.date | date: 'longDate' }}</ng-container>
+                        <div>{{ day.date | date: 'dd MMM' }}</div>
+                        <div *ngIf="!isThisYear(day.date)" class="text-sm">({{ day.date | date: 'yyyy' }})</div>
                     </td>
                     <td>
                         <ng-container *ngTemplateOutlet="start; context: { $implicit: period }"></ng-container>
@@ -47,6 +52,9 @@
                     <td *ngIf="period.end !== null">
                         <ng-container *ngTemplateOutlet="end; context: { $implicit: period }"></ng-container>
                     </td>
+                    <td>
+                        <ng-container *ngTemplateOutlet="edit; context: { $implicit: period }"></ng-container>
+                    </td>
                     <td *ngIf="i === 0" attr.rowspan="{{ day.periods.length }}">
                         <ng-container *ngTemplateOutlet="total; context: { $implicit: day }"></ng-container>
                     </td>
@@ -55,21 +63,39 @@
         </tbody>
     </table>
 </div>
-<app-period-edit-modal *ngIf="modalOpened" [id]="selectedPeriodId" (close)="closeModal()"></app-period-edit-modal>
+<app-period-edit-modal *ngIf="modalOpened" [id]="selectedPeriodId!" (close)="closeModal()"></app-period-edit-modal>
 
 <ng-template #start let-period>
-    <button class="btn btn-sm btn-ghost" (click)="openModal(period.id)">
-        {{ period.start | date: defaultTimeFormat }}
-    </button>
+    {{ period.start | date: defaultTimeFormat }}
 </ng-template>
 
 <ng-template #end let-period>
-    <button class="btn btn-sm btn-ghost" (click)="openModal(period.id)">
-        {{ period.end | date: defaultTimeFormat }}
-    </button>
+    {{ period.end | date: defaultTimeFormat }}
+</ng-template>
+
+<ng-template #edit let-period>
+    <div class="dropdown dropdown-end">
+        <label tabindex="0" class="btn btn-circle btn-ghost btn-xs">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                class="w-4 h-4 stroke-current"
+                fill="none"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="arcs"
+            >
+                <circle cx="12" cy="12" r="1"></circle>
+                <circle cx="12" cy="5" r="1"></circle>
+                <circle cx="12" cy="19" r="1"></circle>
+            </svg>
+        </label>
+        <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-neutral rounded-box w-52">
+            <li><a (click)="openModal(period.id ?? 0)">Aanpassen</a></li>
+        </ul>
+    </div>
 </ng-template>
 
 <ng-template #total let-day>
-    <ng-container *ngIf="getHours(day.totalMs) > 0"> {{ getHours(day.totalMs) }}u </ng-container>
-    {{ getMinutes(day.totalMs) }}m
+    {{ day.totalMs | time }}
 </ng-template>
