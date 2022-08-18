@@ -1,5 +1,10 @@
-import { differenceInMilliseconds } from 'date-fns';
-import { Period } from './types';
+import { differenceInMilliseconds, isAfter, startOfMonth } from 'date-fns';
+import { DayInfo, FilterType, Period } from './types';
+
+const filterMap = new Map<FilterType, (day: DayInfo) => boolean>([
+    [FilterType.Month, day => isAfter(day.date, startOfMonth(new Date()))],
+    [FilterType.All, _ => true],
+]);
 
 export class Utils {
     static add: <T>(arr: T[], selector: (value: T) => number) => number = (arr, selector) =>
@@ -29,5 +34,9 @@ export class Utils {
 
     static msToMinutes(milliseconds: number): number {
         return Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+    }
+
+    static filter(filter: FilterType): (day: DayInfo) => boolean {
+        return filterMap.get(filter)!;
     }
 }

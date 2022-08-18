@@ -1,17 +1,20 @@
-<div class="stats shadow">
-    <div class="stat" *ngIf="relativeMonthMs$ | async as month">
-        <div class="stat-title">Deze maand</div>
-        <div class="stat-value" [ngClass]="month >= 0 ? 'text-success-content' : 'text-warning-content'">
-            {{ month | time }}
+<div class="stats shadow w-full overflow-x-auto">
+    <div *ngIf="ingeklokt$ | async" class="stat">
+        <div class="stat-title">Ingeklokt</div>
+        <div class="stat-value text-primary w-8 h-8 stroke-current">
+            <app-icon-klok class=""></app-icon-klok>
         </div>
-        <div class="stat-desc">{{ month >= 0 ? 'Te veel' : 'Te weinig' }} gewerkt</div>
     </div>
-
-    <div class="stat" *ngIf="relativeTotalMs$ | async as total">
-        <div class="stat-title">Totaal</div>
-        <div class="stat-value" [ngClass]="total >= 0 ? 'text-success-content' : 'text-warning-content'">
-            {{ total | time }}
+    <ng-container *ngFor="let timeStat of timeStats">
+        <div *ngIf="timeStat.ms$ | async as ms" class="stat">
+            <div class="stat-title">{{ timeStat.title }}</div>
+            <div class="stat-value text-3xl">
+                <span *ngIf="timeStat.balans" [ngClass]="ms >= 0 ? 'text-success-content' : 'text-warning-content'">{{
+                    ms | time
+                }}</span>
+                <ng-container *ngIf="!timeStat.balans">{{ ms | time }}</ng-container>
+            </div>
+            <div *ngIf="timeStat.footer" class="stat-desc">{{ timeStat.footer }}</div>
         </div>
-        <div class="stat-desc">{{ total >= 0 ? 'Te veel' : 'Te weinig' }} gewerkt</div>
-    </div>
+    </ng-container>
 </div>

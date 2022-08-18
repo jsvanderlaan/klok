@@ -1,0 +1,4 @@
+<ng-container *ngIf="page$ | async as page">
+    <app-period-table *ngIf="page === pageType.Periods"></app-period-table>
+    <app-balans-table *ngIf="page === pageType.Balans"></app-balans-table>
+</ng-container>

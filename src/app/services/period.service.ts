@@ -35,7 +35,6 @@ export class PeriodService implements OnDestroy {
                     period => isSameDay(period.start, dateTime) && isBefore(period.start, dateTime)
                 );
                 const targetPeriod = Utils.max(existingPeriodsInSameDay, period => period.start.getTime());
-                console.log(existingPeriodsInSameDay, targetPeriod);
 
                 return from(
                     targetPeriod && targetPeriod.end === null

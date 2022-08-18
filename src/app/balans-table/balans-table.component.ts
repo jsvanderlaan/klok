@@ -6,16 +6,11 @@ import { DayService } from '../services/day.service';
 import { DayInfo } from '../types';
 
 @Component({
-    selector: 'app-period-table',
-    templateUrl: './period-table.component.html',
+    selector: 'app-balans-table',
+    templateUrl: './balans-table.component.html',
 })
-export class PeriodTableComponent {
+export class BalansTableComponent {
     days$: Observable<DayInfo[]>;
-    defaultTimeFormat = Constants.defaultTimeFormat;
-
-    modalOpened: boolean = false;
-    selectedPeriodId: number | null = null;
-
     constructor(dayService: DayService) {
         this.days$ = dayService.filteredLiveDays$;
     }
@@ -24,13 +19,7 @@ export class PeriodTableComponent {
         return isSameYear(date, new Date());
     }
 
-    openModal(periodId: number): void {
-        this.selectedPeriodId = periodId;
-        this.modalOpened = true;
-    }
-
-    closeModal(): void {
-        this.selectedPeriodId = null;
-        this.modalOpened = false;
+    balans(day: DayInfo): number {
+        return day.totalMs - Constants.workDayMs;
     }
 }

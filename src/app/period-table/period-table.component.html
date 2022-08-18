@@ -1,77 +1,37 @@
-<div class="flex gap-10 tracking-wide">
-    <table class="table table-compact">
-        <thead>
-            <tr>
-                <th>Dag</th>
-                <th><div class="flex justify-center">In</div></th>
-                <th><div class="flex justify-center">Uit</div></th>
-                <th></th>
-                <th>Gewerkt</th>
+<table class="table table-compact w-full">
+    <tbody>
+        <ng-container *ngFor="let day of days$ | async">
+            <tr *ngFor="let period of day.periods; let i = index">
+                <td *ngIf="i === 0" attr.rowspan="{{ day.periods.length }}">
+                    <ng-container *ngIf="!day.isToday">
+                        {{ day.date | date: 'dd MMMM'
+                        }}<ng-container *ngIf="!isThisYear(day.date)"> {{ day.date | date: 'yyyy' }}</ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="day.isToday">Vandaag</ng-container>
+                </td>
+                <td>
+                    {{ period.start | date: defaultTimeFormat }}
+                </td>
+                <td>-</td>
+                <td>
+                    <ng-container *ngIf="period.end !== null">{{ period.end | date: defaultTimeFormat }}</ng-container>
+                    <ng-container *ngIf="period.end === null">
+                        <span *ngIf="!day.isToday" class="tooltip flex items-center text-warning" data-tip="niet uitgeklokt">
+                            <app-icon-warning class="w-5 h-5 stroke-current"></app-icon-warning>
+                        </span>
+                        <span *ngIf="day.isToday" class="tooltip flex items-center text-primary" data-tip="klok loopt">
+                            <app-icon-klok class="w-5 h-5 stroke-current"></app-icon-klok>
+                        </span>
+                    </ng-container>
+                </td>
+                <td>
+                    <ng-container *ngTemplateOutlet="edit; context: { $implicit: period }"></ng-container>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            <ng-container *ngIf="liveToday$ | async as today">
-                <tr *ngFor="let period of today.periods; let i = index" class="active">
-                    <td *ngIf="i === 0" attr.rowspan="{{ today.periods.length }}">
-                        <div>Vandaag</div>
-                    </td>
-                    <td>
-                        <ng-container *ngTemplateOutlet="start; context: { $implicit: period }"></ng-container>
-                    </td>
-                    <td *ngIf="period.end === null" class="text-primary">
-                        <div class="tooltip flex justify-center" data-tip="klok loopt">
-                            <app-icon-klok class="w-6 h-6 stroke-current"></app-icon-klok>
-                        </div>
-                    </td>
-                    <td *ngIf="period.end !== null">
-                        <ng-container *ngTemplateOutlet="end; context: { $implicit: period }"></ng-container>
-                    </td>
-                    <td>
-                        <ng-container *ngTemplateOutlet="edit; context: { $implicit: period }"></ng-container>
-                    </td>
-                    <td *ngIf="i === 0" attr.rowspan="{{ today.periods.length }}">
-                        <ng-container *ngTemplateOutlet="total; context: { $implicit: today }"></ng-container>
-                    </td>
-                </tr>
-            </ng-container>
-
-            <ng-container *ngFor="let day of daysWithoutToday$ | async">
-                <tr *ngFor="let period of day.periods; let i = index">
-                    <td *ngIf="i === 0" attr.rowspan="{{ day.periods.length }}">
-                        <div>{{ day.date | date: 'dd MMM' }}</div>
-                        <div *ngIf="!isThisYear(day.date)">{{ day.date | date: 'yyyy' }}</div>
-                    </td>
-                    <td>
-                        <ng-container *ngTemplateOutlet="start; context: { $implicit: period }"></ng-container>
-                    </td>
-                    <td *ngIf="period.end === null" class="text-warning">
-                        <div class="tooltip flex justify-center" data-tip="niet uitgeklokt">
-                            <app-icon-warning class="w-6 h-6 stroke-current"></app-icon-warning>
-                        </div>
-                    </td>
-                    <td *ngIf="period.end !== null">
-                        <ng-container *ngTemplateOutlet="end; context: { $implicit: period }"></ng-container>
-                    </td>
-                    <td>
-                        <ng-container *ngTemplateOutlet="edit; context: { $implicit: period }"></ng-container>
-                    </td>
-                    <td *ngIf="i === 0" attr.rowspan="{{ day.periods.length }}">
-                        <ng-container *ngTemplateOutlet="total; context: { $implicit: day }"></ng-container>
-                    </td>
-                </tr>
-            </ng-container>
-        </tbody>
-    </table>
-</div>
+        </ng-container>
+    </tbody>
+</table>
 <app-period-edit-modal *ngIf="modalOpened" [id]="selectedPeriodId!" (close)="closeModal()"></app-period-edit-modal>
-
-<ng-template #start let-period>
-    {{ period.start | date: defaultTimeFormat }}
-</ng-template>
-
-<ng-template #end let-period>
-    {{ period.end | date: defaultTimeFormat }}
-</ng-template>
 
 <ng-template #edit let-period>
     <div class="dropdown dropdown-end">
@@ -94,8 +54,4 @@
             <li><a (click)="openModal(period.id ?? 0)">Aanpassen</a></li>
         </ul>
     </div>
-</ng-template>
-
-<ng-template #total let-day>
-    {{ day.totalMs | time }}
 </ng-template>

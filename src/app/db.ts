@@ -1,18 +1,30 @@
+import { addMinutes, subDays } from 'date-fns';
 import Dexie, { Table } from 'dexie';
 import { environment } from 'src/environments/environment';
-import { Period } from './types';
+import { FilterType, PageType, Period, State } from './types';
 
 export class PeriodDB extends Dexie {
     periods!: Table<Period, number>;
+    state!: Table<State, string>;
 
     constructor() {
         super('klok');
         this.version(1).stores({
             periods: '++id, start',
         });
+        this.version(2).stores({
+            periods: '++id, start',
+            state: 'key',
+        });
         if (!environment.production) {
             this.on('populate', () => this.populateTestData());
         }
+        this.on('populate', () =>
+            db.state.bulkAdd([
+                { key: 'page', value: PageType.Periods },
+                { key: 'filter', value: FilterType.Month },
+            ])
+        );
     }
 
     async populateTestData() {
@@ -71,5 +83,5 @@ const testPeriods: Period[] = [
     // [new Date(2021, 6, 16, 12, 15, 5), new Date(2021, 6, 16, 16, 35, 55)],
     // [new Date(2022, 6, 15, 8, 15, 5), new Date(2022, 6, 15, 12, 0, 0)],
     // [new Date(2022, 6, 15, 12, 15, 5), new Date(2022, 6, 15, 16, 35, 55)],
-    // [subMinutes(new Date(), 270), subMinutes(new Date(), 30)],
+    [subDays(new Date(), 1), addMinutes(subDays(new Date(), 1), 200)],
 ].map(([start, end]) => ({ start, end } as Period));

@@ -1,0 +1,19 @@
+<table class="table table-compact w-full">
+    <tbody>
+        <tr *ngFor="let day of days$ | async">
+            <td>
+                <ng-container *ngIf="!day.isToday">
+                    {{ day.date | date: 'dd MMMM'
+                    }}<ng-container *ngIf="!isThisYear(day.date)"> {{ day.date | date: 'yyyy' }}</ng-container>
+                </ng-container>
+                <ng-container *ngIf="day.isToday">Vandaag</ng-container>
+            </td>
+            <td>{{ day.totalMs | time }}</td>
+            <td>
+                <span [ngClass]="balans(day) >= 0 ? 'text-success' : 'text-warning'">
+                    {{ balans(day) | time }}
+                </span>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -16,6 +16,9 @@ import { PeriodTableComponent } from './period-table/period-table.component';
 import { StatsComponent } from './stats/stats.component';
 import { TimePipe } from './time.pipe';
 import { NoPeriodsComponent } from './no-periods/no-periods.component';
+import { FilterComponent } from './filter/filter.component';
+import { PageComponent } from './page/page.component';
+import { BalansTableComponent } from './balans-table/balans-table.component';
 
 registerLocaleData(localeNl, 'nl');
 
@@ -30,6 +33,9 @@ registerLocaleData(localeNl, 'nl');
         StatsComponent,
         TimePipe,
         NoPeriodsComponent,
+        FilterComponent,
+        PageComponent,
+        BalansTableComponent,
     ],
     imports: [
         BrowserModule,

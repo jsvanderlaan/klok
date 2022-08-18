@@ -1,0 +1,18 @@
+<div class="w-full flex justify-around">
+    <select
+        *ngIf="page$ | async as defaultPage"
+        name="pages"
+        class="select select-md"
+        (change)="changePage($any($event.target).value)"
+    >
+        <option *ngFor="let page of pageTypes" [value]="page" [selected]="page === defaultPage">{{ page }}</option>
+    </select>
+    <select
+        *ngIf="filter$ | async as defaultFilter"
+        name="filter"
+        class="select select-md"
+        (change)="changeFilter($any($event.target).value)"
+    >
+        <option *ngFor="let filter of filterTypes" [value]="filter" [selected]="filter === defaultFilter">{{ filter }}</option>
+    </select>
+</div>

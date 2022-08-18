@@ -1,11 +1,12 @@
-<main class="flex flex-col gap-8 items-center h-screen overflow-hidden overflow-y-scroll">
-    <h1 class="text-6xl pt-12 font-bold">klok</h1>
-    <app-stats *ngIf="(anyPeriods$ | async) === true"></app-stats>
-    <app-period-table *ngIf="(anyPeriods$ | async) === true"></app-period-table>
-    <app-no-periods *ngIf="(anyPeriods$ | async) === false"></app-no-periods>
-    <div></div>
-    <div></div>
-</main>
-<footer class="fixed bottom-0 w-full">
-    <app-klok-button></app-klok-button>
-</footer>
+<div class="flex flex-col h-screen gap-4 w-full px-4">
+    <header class="flex w-full pt-6 justify-center">
+        <h1 class="text-4xl font-bold">klok</h1>
+    </header>
+    <app-stats class="self-center w-full" *ngIf="(anyPeriods$ | async) === true"></app-stats>
+    <app-filter class="self-center w-full"></app-filter>
+    <app-page *ngIf="(anyPeriods$ | async) === true" class="self-center flex-grow overflow-y-auto"></app-page>
+    <app-no-periods class="self-center" *ngIf="(anyPeriods$ | async) === false"></app-no-periods>
+    <footer class="w-full flex-grow flex flex-col justify-end">
+        <app-klok-button></app-klok-button>
+    </footer>
+</div>

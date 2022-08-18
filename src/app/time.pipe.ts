@@ -13,9 +13,9 @@ export class TimePipe implements PipeTransform {
         const minutes = Utils.msToMinutes(milliseconds);
 
         if (hours === 0 && minutes === 0) {
-            return '-';
+            return '< 1m';
         }
 
-        return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+        return hours !== 0 ? `${hours}h ${Math.abs(minutes)}m` : `${minutes}m`;
     }
 }
