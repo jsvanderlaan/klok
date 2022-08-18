@@ -1,7 +1,7 @@
 import { addMinutes, subDays } from 'date-fns';
 import Dexie, { Table } from 'dexie';
 import { environment } from 'src/environments/environment';
-import { FilterType, PageType, Period, State } from './types';
+import { Period, State } from './types';
 
 export class PeriodDB extends Dexie {
     periods!: Table<Period, number>;
@@ -19,12 +19,6 @@ export class PeriodDB extends Dexie {
         if (!environment.production) {
             this.on('populate', () => this.populateTestData());
         }
-        this.on('populate', () =>
-            db.state.bulkAdd([
-                { key: 'page', value: PageType.Periods },
-                { key: 'filter', value: FilterType.Month },
-            ])
-        );
     }
 
     async populateTestData() {

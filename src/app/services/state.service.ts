@@ -8,6 +8,17 @@ import { FilterType, PageType } from '../types';
     providedIn: 'root',
 })
 export class StateService {
+    constructor() {
+        db.state.count().then(count => {
+            if (count === 0) {
+                db.state.bulkAdd([
+                    { key: 'page', value: PageType.Periods },
+                    { key: 'filter', value: FilterType.Month },
+                ]);
+            }
+        });
+    }
+
     page$ = from(liveQuery(() => db.state.get('page'))).pipe(
         map(state => (state?.value as PageType | undefined) ?? null),
         filter(page => !!page),
