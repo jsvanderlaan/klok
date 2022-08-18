@@ -1,5 +1,5 @@
 <div class="flex gap-10 tracking-wide">
-    <table class="table">
+    <table class="table table-compact">
         <thead>
             <tr>
                 <th>Dag</th>
@@ -39,7 +39,7 @@
                 <tr *ngFor="let period of day.periods; let i = index">
                     <td *ngIf="i === 0" attr.rowspan="{{ day.periods.length }}">
                         <div>{{ day.date | date: 'dd MMM' }}</div>
-                        <div *ngIf="!isThisYear(day.date)" class="text-sm">({{ day.date | date: 'yyyy' }})</div>
+                        <div *ngIf="!isThisYear(day.date)">{{ day.date | date: 'yyyy' }}</div>
                     </td>
                     <td>
                         <ng-container *ngTemplateOutlet="start; context: { $implicit: period }"></ng-container>

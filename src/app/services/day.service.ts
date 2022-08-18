@@ -43,4 +43,8 @@ export class DayService {
             };
         })
     );
+
+    liveTime$: Observable<Date> = interval(Constants.updateRateMs)
+        .pipe(startWith(0))
+        .pipe(map(() => new Date()));
 }

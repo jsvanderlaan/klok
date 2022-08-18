@@ -5,6 +5,9 @@ export class Utils {
     static add: <T>(arr: T[], selector: (value: T) => number) => number = (arr, selector) =>
         arr.reduce((prev, curr) => prev + selector(curr), 0);
 
+    static max = <T>(arr: T[], selector: (value: T) => number): T | null =>
+        arr.reduce<T | null>((prev, curr) => (prev === null || selector(prev) < selector(curr) ? curr : prev), null as T | null);
+
     static groupBy = <T>(arr: T[], keyF: (item: T) => string): { [key: string]: T[] } => {
         return arr.reduce((curr, next) => {
             (curr[keyF(next)] = curr[keyF(next)] || []).push(next);

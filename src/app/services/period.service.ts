@@ -1,9 +1,10 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { isSameDay } from 'date-fns';
+import { isBefore, isSameDay } from 'date-fns';
 import { liveQuery } from 'dexie';
 import { from, map, Observable, shareReplay, Subject, Subscription, switchMap, take } from 'rxjs';
 import { db } from '../db';
 import { Period } from '../types';
+import { Utils } from '../utils';
 
 @Injectable({
     providedIn: 'root',
@@ -29,13 +30,19 @@ export class PeriodService implements OnDestroy {
     klok(dateTime: Date): Observable<number> {
         return this._validatedPeriods$.pipe(
             take(1),
-            switchMap(periods =>
-                from(
-                    periods.length === 0 || !isSameDay(periods[0].start, dateTime) || periods[0].end !== null
-                        ? db.periods.add({ start: dateTime, end: null })
-                        : db.periods.update(periods[0], { end: dateTime })
-                )
-            )
+            switchMap(periods => {
+                const existingPeriodsInSameDay = periods.filter(
+                    period => isSameDay(period.start, dateTime) && isBefore(period.start, dateTime)
+                );
+                const targetPeriod = Utils.max(existingPeriodsInSameDay, period => period.start.getTime());
+                console.log(existingPeriodsInSameDay, targetPeriod);
+
+                return from(
+                    targetPeriod && targetPeriod.end === null
+                        ? db.periods.update(targetPeriod, { end: dateTime })
+                        : db.periods.add({ start: dateTime, end: null })
+                );
+            })
         );
     }
 

@@ -1,7 +1,11 @@
-<div class="flex flex-col gap-12 items-center">
+<main class="flex flex-col gap-8 items-center h-screen overflow-hidden overflow-y-scroll">
     <h1 class="text-6xl pt-12 font-bold">klok</h1>
-    <app-klok-button></app-klok-button>
     <app-stats *ngIf="(anyPeriods$ | async) === true"></app-stats>
     <app-period-table *ngIf="(anyPeriods$ | async) === true"></app-period-table>
     <app-no-periods *ngIf="(anyPeriods$ | async) === false"></app-no-periods>
-</div>
+    <div></div>
+    <div></div>
+</main>
+<footer class="fixed bottom-0 w-full">
+    <app-klok-button></app-klok-button>
+</footer>

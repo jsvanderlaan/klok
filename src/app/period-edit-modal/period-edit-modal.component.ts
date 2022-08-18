@@ -17,8 +17,8 @@ export class PeriodEditModalComponent implements OnInit, AfterViewInit {
     controls = {
         hoursIn: new FormControl(null, Validators.required) as FormControl<number | null>,
         minutesIn: new FormControl(null, Validators.required) as FormControl<number | null>,
-        hoursOut: new FormControl(null, Validators.required) as FormControl<number | null>,
-        minutesOut: new FormControl(null, Validators.required) as FormControl<number | null>,
+        hoursOut: new FormControl(null) as FormControl<number | null>,
+        minutesOut: new FormControl(null) as FormControl<number | null>,
     };
 
     form: FormGroup = new FormGroup(this.controls);
@@ -58,7 +58,7 @@ export class PeriodEditModalComponent implements OnInit, AfterViewInit {
     savePeriod(): void {
         this.triedSubmitting = true;
         if (this.form.valid && this.period !== null) {
-            const start = this._getDate(this.period.start, this.controls.hoursIn.value, this.controls.minutesIn.value);
+            const start = this._getDate(this.period.start, this.controls.hoursIn.value, this.controls.minutesIn.value)!;
             const end = this._getDate(this.period.start, this.controls.hoursOut.value, this.controls.minutesOut.value);
             this._periodService.update({ id: this.id, start, end }).subscribe(() => this.closeModal());
         }
@@ -72,7 +72,7 @@ export class PeriodEditModalComponent implements OnInit, AfterViewInit {
         this.close.emit(true);
     }
 
-    private _getDate(date: Date, hours: number | null, minutes: number | null): Date {
-        return addMinutes(addHours(startOfDay(date), hours ?? 0), minutes ?? 0);
+    private _getDate(date: Date, hours: number | null, minutes: number | null): Date | null {
+        return hours === null && minutes === null ? null : addMinutes(addHours(startOfDay(date), hours ?? 0), minutes ?? 0);
     }
 }
