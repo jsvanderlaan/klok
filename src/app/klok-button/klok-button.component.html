@@ -31,7 +31,7 @@
     <button class="btn btn-primary text-lg shadow-md shadow-black" [ngClass]="{ 'btn-disabled': bliep }" (click)="onClick()">
         <ng-container *ngIf="!bliep"> {{ time$ | async | date: 'HH:mm' }} </ng-container>
         <ng-container *ngIf="bliep">bliep</ng-container>
-        <app-icon-klok class="stroke-current pl-1"></app-icon-klok>
+        <app-icon-klok class="stroke-current pl-1 w-5 h-5 flex items-center"></app-icon-klok>
     </button>
     <button class="btn btn-ghost" (click)="addMinutes(30)">
         <svg

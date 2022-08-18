@@ -29,11 +29,11 @@ export class Utils {
     }
 
     static msToHours(milliseconds: number): number {
-        return Math.floor(milliseconds / (1000 * 60 * 60));
+        return Math.trunc(milliseconds / (1000 * 60 * 60));
     }
 
     static msToMinutes(milliseconds: number): number {
-        return Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+        return Math.trunc((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
     }
 
     static filter(filter: FilterType): (day: DayInfo) => boolean {
